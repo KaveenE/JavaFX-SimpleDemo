@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.basketball.controller.LoginController"
+      alignment="CENTER" spacing="15" style="-fx-background-color: #f4f4f4;">
+    <padding>
+        <Insets top="30" right="40" bottom="30" left="40"/>
+    </padding>
+
+    <Label text="Basketball Management System" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <Label text="Enter your name:"/>
+    <TextField fx:id="nameField" promptText="e.g., Alex Smith" prefWidth="200"/>
+
+    <Label text="Password:"/>
+    <PasswordField fx:id="passwordField" promptText="Enter password" prefWidth="200"/>
+
+    <Button text="Login" onAction="#onLoginClick" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"
+            prefWidth="200" prefHeight="35"/>
+
+    <Label fx:id="messageLabel" style="-fx-text-fill: red;" alignment="CENTER"/>
+</VBox>

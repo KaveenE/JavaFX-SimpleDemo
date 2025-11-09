@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.lang.String?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.example.basketball.controller.DashboardController"
+      spacing="20" style="-fx-background-color: #f9f9f9;">
+
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="Basketball Management System" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Welcome," style="-fx-font-weight: bold;"/>
+        <Label fx:id="userNameLabel" style="-fx-font-weight: bold; -fx-text-fill: #2e7d32;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Logout" onAction="#onLogoutClick" style="-fx-background-color: #e53935; -fx-text-fill: white;"/>
+    </HBox>
+
+    <Separator/>
+
+    <Label text="Add New Player" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Age:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="ageField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Position:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="positionBox" GridPane.rowIndex="2" GridPane.columnIndex="1">
+            <items>
+                <fx:define>
+                    <javafx.collections.FXCollections fx:factory="observableArrayList">
+                        <String fx:value="Guard"/>
+                        <String fx:value="Forward"/>
+                        <String fx:value="Center"/>
+                    </javafx.collections.FXCollections>
+                </fx:define>
+            </items>
+        </ComboBox>
+
+        <Label text="PPG:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="ppgField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Button text="Add Player" onAction="#onAddPlayerClick"
+                GridPane.rowIndex="4" GridPane.columnIndex="1"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+    </GridPane>
+
+    <Label text="Current Roster" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+    <ListView fx:id="playerListView" prefHeight="200"/>
+
+    <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+</VBox>
