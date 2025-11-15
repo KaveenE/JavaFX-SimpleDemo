@@ -1,4 +1,3 @@
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -45,3 +44,7 @@ target/
 *.db
 *.csv
 *.monokle
+
+### H2 Database ###
+data/
+*.mv.db

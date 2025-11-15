@@ -11,6 +11,8 @@ module com.example.basketball {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires com.h2database;
+    requires java.desktop;
 
     opens com.example.basketball.controller to javafx.fxml;
     exports com.example.basketball;
