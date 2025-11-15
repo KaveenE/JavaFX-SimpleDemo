@@ -1,15 +1,19 @@
 // src/main/java/com/example/basketball/controller/PlayersTabController.java
 package com.example.basketball.controller;
 
-import com.example.basketball.model.enums.Handedness;
 import com.example.basketball.model.Player;
+import com.example.basketball.model.enums.Handedness;
 import com.example.basketball.service.PlayerService;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -45,6 +49,16 @@ public class PlayersTabController {
         photoComboBox.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldVal, newVal) ->  updatePhotoPreview(newVal)
         );
+
+        // ---- NEW: click a player → open edit dialog ----
+        playerListView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {               // double-click
+                Player selected = playerListView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    openEditDialog(selected);
+                }
+            }
+        });
 
         refreshPlayerList();
     }
@@ -116,6 +130,36 @@ public class PlayersTabController {
 
         } catch (Exception e) {
             showStatus("Invalid input: " + e.getMessage(), true);
+        }
+    }
+
+    private void openEditDialog(Player player) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/fxml/player-edit-dialog.fxml"));
+            Parent root = loader.load();
+
+            PlayerEditDialogController ctrl = loader.getController();
+
+            Stage dialog = new Stage();
+            dialog.initModality(Modality.APPLICATION_MODAL);
+            dialog.initOwner(playerListView.getScene().getWindow());
+            dialog.setTitle("Edit Player – " + player.getName());
+            dialog.setScene(new Scene(root, 560, 680));
+            dialog.setResizable(false);
+
+            ctrl.setDialogStage(dialog);
+            ctrl.setPlayer(player);
+
+            dialog.showAndWait();
+
+            if (ctrl.isSaved()) {
+                refreshPlayerList();
+                showStatus("Player updated/deleted.", false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showStatus("Failed to open edit dialog.", true);
         }
     }
 

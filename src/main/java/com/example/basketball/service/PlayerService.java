@@ -2,19 +2,18 @@
 package com.example.basketball.service;
 
 import com.example.basketball.model.Player;
+import com.example.basketball.model.enums.Handedness;
 import com.example.basketball.util.JDBCUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.basketball.model.enums.Handedness;
-
 
 public class PlayerService {
 
     private static final String INSERT_SQL = """
-        INSERT INTO players 
+        INSERT INTO players
         (name, age, height, weight, wingspan, handedness, max_vertical_leap, stamina, agility, speed, photo_path)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """;
@@ -93,5 +92,49 @@ public class PlayerService {
             throw new RuntimeException("Failed to load players", e);
         }
         return players;
+    }
+
+    // add these two methods to PlayerService.java (keep the rest unchanged)
+
+    private static final String UPDATE_SQL = """
+    UPDATE players SET
+        name = ?, age = ?, height = ?, weight = ?, wingspan = ?,
+        handedness = ?, max_vertical_leap = ?, stamina = ?, agility = ?, speed = ?, photo_path = ?
+    WHERE id = ?
+    """;
+
+    private static final String DELETE_SQL = "DELETE FROM players WHERE id = ?";
+
+    public void updatePlayer(Player p) {
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
+
+            ps.setString(1, p.getName());
+            ps.setInt(2, p.getAge());
+            ps.setDouble(3, p.getHeight());
+            ps.setDouble(4, p.getWeight());
+            ps.setDouble(5, p.getWingspan());
+            ps.setString(6, p.getHandedness() != null ? p.getHandedness().name() : null);
+            ps.setDouble(7, p.getMaxVerticalLeap());
+            ps.setInt(8, p.getStamina());
+            ps.setInt(9, p.getAgility());
+            ps.setInt(10, p.getSpeed());
+            ps.setString(11, p.getPhotoPath());
+            ps.setLong(12, p.getId());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update player", e);
+        }
+    }
+
+    public void deletePlayer(Long id) {
+        try (Connection conn = JDBCUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
+            ps.setLong(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete player", e);
+        }
     }
 }
