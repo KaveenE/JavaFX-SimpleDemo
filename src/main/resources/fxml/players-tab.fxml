@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.example.basketball.controller.PlayersTabController"
+            fitToWidth="true" style="-fx-background: white;">
+
+    <VBox spacing="15" style="-fx-padding: 15;">
+
+        <Label text="Add New Player" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="10" vgap="8" alignment="TOP_LEFT">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <!-- Row 0 -->
+            <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <!-- Row 1 -->
+            <Label text="Age:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="ageField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <!-- Row 2 -->
+            <Label text="Height (cm):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="heightField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <!-- Row 3 -->
+            <Label text="Weight (kg):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="weightField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <!-- Row 4 -->
+            <Label text="Wingspan (cm):" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <TextField fx:id="wingspanField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <!-- Row 5 -->
+            <Label text="Handedness:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="handednessBox" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <!-- Row 6 -->
+            <Label text="Max Vertical (cm):" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+            <TextField fx:id="verticalField" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <!-- Row 7 -->
+            <Label text="Stamina (0-100):" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+            <Slider fx:id="staminaSlider" min="0" max="100" showTickLabels="true" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+            <Label fx:id="staminaLabel" text="50" GridPane.rowIndex="7" GridPane.columnIndex="2"/>
+
+            <!-- Row 8 -->
+            <Label text="Agility (0-100):" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+            <Slider fx:id="agilitySlider" min="0" max="100" showTickLabels="true" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+            <Label fx:id="agilityLabel" text="50" GridPane.rowIndex="8" GridPane.columnIndex="2"/>
+
+            <!-- Row 9 -->
+            <Label text="Speed (0-100):" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+            <Slider fx:id="speedSlider" min="0" max="100" showTickLabels="true" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+            <Label fx:id="speedLabel" text="50" GridPane.rowIndex="9" GridPane.columnIndex="2"/>
+
+            <!-- Row 10 -->
+            <Label text="Photo:" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+            <ComboBox fx:id="photoComboBox" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+            <ImageView fx:id="photoPreview" fitWidth="80" fitHeight="80" preserveRatio="true"
+                       GridPane.rowIndex="10" GridPane.columnIndex="2" GridPane.valignment="CENTER"/>
+        </GridPane>
+
+        <HBox spacing="10">
+            <Button text="Add Player" onAction="#onAddPlayerClick"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+            <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+        </HBox>
+
+        <Separator/>
+
+        <Label text="Current Roster" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <ListView fx:id="playerListView" prefHeight="300"/>
+
+    </VBox>
+</ScrollPane>

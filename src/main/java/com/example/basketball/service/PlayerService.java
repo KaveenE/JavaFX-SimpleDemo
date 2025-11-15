@@ -8,26 +8,55 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.basketball.model.enums.Handedness;
+
+
 public class PlayerService {
 
-    public void addPlayer(Player player) {
-        String sql = "INSERT INTO players (name, age, position, points_per_game) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_SQL = """
+        INSERT INTO players 
+        (name, age, height, weight, wingspan, handedness, max_vertical_leap, stamina, agility, speed, photo_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """;
 
+    private static final String SELECT_ALL = "SELECT * FROM players ORDER BY name";
+
+    public void addPlayer(Player player) {
+        System.out.println("Executing: " + INSERT_SQL);
+        System.out.printf("Params: %s, %d, %.2f, %.2f, %.2f, %s, %.2f, %d, %d, %d, %s%n",
+                player.getName(), player.getAge(), player.getHeight(), player.getWeight(),
+                player.getWingspan(), player.getHandedness(),
+                player.getMaxVerticalLeap(), player.getStamina(), player.getAgility(),
+                player.getSpeed(), player.getPhotoPath());
         try (Connection conn = JDBCUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, player.getName());
             ps.setInt(2, player.getAge());
-            ps.setString(3, player.getPosition());
-            ps.setDouble(4, player.getPointsPerGame());
+            ps.setDouble(3, player.getHeight());
+            ps.setDouble(4, player.getWeight());
+            ps.setDouble(5, player.getWingspan());
 
+            if (player.getHandedness() != null) {
+                ps.setString(6, player.getHandedness().name());
+            } else {
+                ps.setNull(6, Types.VARCHAR);
+            }
+
+            ps.setDouble(7, player.getMaxVerticalLeap());
+            ps.setInt(8, player.getStamina());
+            ps.setInt(9, player.getAgility());
+            ps.setInt(10, player.getSpeed());
+
+            if (player.getPhotoPath() != null && !player.getPhotoPath().isEmpty()) {
+                ps.setString(11, player.getPhotoPath());
+            } else {
+                ps.setNull(11, Types.VARCHAR);
+            }
             ps.executeUpdate();
 
-            // retrieve generated id
             try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    player.setId(rs.getLong(1));
-                }
+                if (rs.next()) player.setId(rs.getLong(1));
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to add player", e);
@@ -35,11 +64,9 @@ public class PlayerService {
     }
 
     public List<Player> getAllPlayers() {
-        List<Player> list = new ArrayList<>();
-        String sql = "SELECT id, name, age, position, points_per_game FROM players ORDER BY name";
-
+        List<Player> players = new ArrayList<>();
         try (Connection conn = JDBCUtil.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
+             PreparedStatement ps = conn.prepareStatement(SELECT_ALL);
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
@@ -47,13 +74,24 @@ public class PlayerService {
                 p.setId(rs.getLong("id"));
                 p.setName(rs.getString("name"));
                 p.setAge(rs.getInt("age"));
-                p.setPosition(rs.getString("position"));
-                p.setPointsPerGame(rs.getDouble("points_per_game"));
-                list.add(p);
+                p.setHeight(rs.getDouble("height"));
+                p.setWeight(rs.getDouble("weight"));
+                p.setWingspan(rs.getDouble("wingspan"));
+                p.setHandedness(
+                        rs.getString("handedness") != null
+                                ? Handedness.valueOf(rs.getString("handedness"))
+                                : null
+                );
+                p.setMaxVerticalLeap(rs.getDouble("max_vertical_leap"));
+                p.setStamina(rs.getInt("stamina"));
+                p.setAgility(rs.getInt("agility"));
+                p.setSpeed(rs.getInt("speed"));
+                p.setPhotoPath(rs.getString("photo_path"));
+                players.add(p);
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to load players", e);
         }
-        return list;
+        return players;
     }
 }
