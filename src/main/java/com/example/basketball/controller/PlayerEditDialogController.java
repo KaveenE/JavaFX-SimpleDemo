@@ -3,6 +3,7 @@ package com.example.basketball.controller;
 import com.example.basketball.model.Player;
 import com.example.basketball.model.enums.Handedness;
 import com.example.basketball.service.PlayerService;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -29,6 +30,11 @@ public class PlayerEditDialogController {
     private boolean saved = false;      // tells caller if Save was pressed
 
     /* --------------------------------------------------------------------- */
+    @FXML
+    private void initialize() {
+        // Handedness
+        handednessBox.setItems(FXCollections.observableArrayList(Handedness.values()));
+    }
     public void setDialogStage(Stage stage) { this.dialogStage = stage; }
     public boolean isSaved() { return saved; }
 
